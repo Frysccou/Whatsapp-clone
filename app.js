@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createGroup = document.getElementById('create-group');
     const groupNameInput = document.getElementById('group-name');
     const groupContacts = document.getElementById('group-contacts');
+    const addContactButton = document.getElementById('add-contact-button');
 
     let contacts = [
         'Juan Perez', 'Maria Lopez', 'Carlos Sanchez', 
@@ -32,18 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         Object.keys(chats).forEach(groupName => {
-            const chatElement = createChatElement(groupName);
-            chatList.appendChild(chatElement);
+            if (!contacts.includes(groupName)) { // Evitar agregar grupos como contactos personales
+                const chatElement = createChatElement(groupName);
+                chatList.appendChild(chatElement);
+            }
         });
 
-        if (!currentChat) {
+        if (!currentChat || !contacts.includes(currentChat)) {
             chatMessages.innerHTML = '';
             messageInput.style.display = 'none';
             sendButton.style.display = 'none';
         } else {
             messageInput.style.display = 'block';
             sendButton.style.display = 'block';
-            renderChatMessages();
+            if (!chats[currentChat]) {
+                renderChatMessages();
+            }
         }
     };
 
@@ -67,7 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
         contactName.textContent = name;
         currentChat = name;
         chatMessages.innerHTML = '';
-        renderChatMessages();
+        if (!chats[currentChat]) {
+            renderChatMessages();
+        } else {
+            renderGroupMessages();
+        }
         messageInput.style.display = 'block';
         sendButton.style.display = 'block';
     };
@@ -76,10 +85,26 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.innerHTML = '';
         if (chats[currentChat]) {
             chats[currentChat].forEach(message => {
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message', message.type);
-                messageElement.textContent = message.text;
-                chatMessages.appendChild(messageElement);
+                if (message.type === 'received' && message.sender !== currentChat && !message.group) {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', message.type);
+                    messageElement.textContent = message.text;
+                    chatMessages.appendChild(messageElement);
+                }
+            });
+        }
+    };
+
+    const renderGroupMessages = () => {
+        chatMessages.innerHTML = '';
+        if (chats[currentChat]) {
+            chats[currentChat].forEach(message => {
+                if (message.type === 'received' && message.group) {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', message.type);
+                    messageElement.textContent = `${message.sender}: ${message.text}`;
+                    chatMessages.appendChild(messageElement);
+                }
             });
         }
     };
@@ -104,7 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.textContent = messageText;
         chatMessages.appendChild(messageElement);
         
-        chats[currentChat].push({ type: 'sent', text: messageText });
+        if (contacts.includes(currentChat)) {
+            chats[currentChat].push({ type: 'sent', text: messageText });
+        } else {
+            chats[currentChat].push({ type: 'sent', text: messageText, group: true, sender: 'Yo' });
+        }
 
         messageInput.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -123,7 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
             responseElement.textContent = randomResponse;
             chatMessages.appendChild(responseElement);
 
-            chats[currentChat].push({ type: 'received', text: randomResponse });
+            if (contacts.includes(currentChat)) {
+                chats[currentChat].push({ type: 'received', text: randomResponse, sender: currentChat });
+            } else {
+                chats[currentChat].push({ type: 'received', text: randomResponse, group: true, sender: currentChat });
+            }
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             const chatElements = Array.from(chatList.children);
@@ -177,14 +210,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (selectedContacts.length === 0) return;
 
+        if (chats[groupName]) { // Verificar si el grupo ya existe
+            alert(`El grupo "${groupName}" ya existe.`);
+            return;
+        }
+
         chats[groupName] = [];
 
-        chats[groupName].push({ type: 'received', text: `Grupo creado con ${selectedContacts.join(', ')}` });
+        selectedContacts.forEach(contact => {
+            chats[groupName].push({ type: 'received', text: `Añadido al grupo "${groupName}"`, sender: contact });
+        });
 
         renderContacts(); 
         closeGroupModal();
+
+        setTimeout(() => {
+            alert(`Grupo "${groupName}" creado con éxito.`);
+        }, 100);
+
+        console.log(`Grupo "${groupName}" creado con los siguientes miembros: ${selectedContacts.join(', ')}`);
     };
 
+    const addContact = () => {
+        const newContact = prompt('Ingrese el nombre del nuevo contacto:');
+        if (newContact) {
+            contacts.push(newContact);
+            renderContacts();
+        }
+    };
+
+    addContactButton.addEventListener('click', addContact);
     sendButton.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
