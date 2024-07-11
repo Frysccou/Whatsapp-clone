@@ -16,7 +16,7 @@ body {
 }
 
 .sidebar {
-    width: 35%;
+    width: 30%;
     background: #f8f9fa;
     display: flex;
     flex-direction: column;
@@ -25,23 +25,32 @@ body {
 }
 
 .sidebar header {
-    padding: 10px;
+    padding: 20px;
     background: #ffffff;
     border-bottom: 1px solid #ddd;
 }
 
 .sidebar header h1 {
     margin: 0;
-    font-size: 1.2em;
+    font-size: 1.5em;
     padding-bottom: 10px;
 }
 
 .sidebar header input {
-    width: 100%;
+    width: calc(100% - 100px);
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+.sidebar header button {
+    padding: 10px;
+    background: #00796b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .chat-list {
@@ -69,25 +78,36 @@ body {
 }
 
 .chat-window {
-    width: 65%;
+    width: 70%;
     background: white;
     display: flex;
     flex-direction: column;
+    border-left: 1px solid #ddd;
 }
 
 .chat-window header {
-    padding: 10px;
-    background: #00796b;
-    color: white;
+    padding: 20px;
+    background: white;
+    color: black;
     border-bottom: 1px solid #ddd;
+    font-size: 1.5em;
+}
+
+.chat-window .contact-info {
+    padding: 0 20px;
+    margin-bottom: 10px;
+}
+
+.chat-window .recent-message {
+    font-size: 0.8em;
+    color: #888;
 }
 
 .chat-messages {
     flex: 1;
-    padding: 10px;
+    padding: 20px;
     overflow-y: auto;
     background: #efeae2;
-    background-image: url('https://web.whatsapp.com/img/bg-chat-tile_light_7ed2529e7b2c5a60ec8cc77e2728fa44.png');
     background-repeat: repeat;
     background-size: contain;
 }
@@ -112,7 +132,7 @@ body {
 
 .chat-input {
     display: flex;
-    padding: 10px;
+    padding: 20px;
     background: #f0f0f0;
     border-top: 1px solid #ddd;
 }
@@ -137,4 +157,104 @@ body {
 
 .chat-input button:hover {
     background: #055a52;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content .close-button {
+    float: right;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.group-contacts {
+    margin: 20px 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.group-contacts .contact {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.group-contacts .contact input {
+    margin-right: 10px;
+}
+
+/* Estilo adicional para el modal de creación de grupo */
+#group-modal {
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+#group-modal .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 60%;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#group-modal h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+#group-modal input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#group-modal .group-contacts {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#group-modal .group-contacts .contact {
+    margin-bottom: 5px;
+}
+
+#group-modal button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #00796b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+
+#group-modal button:hover {
+    background-color: #055a52;
 }

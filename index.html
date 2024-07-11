@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Clon</title>
+    <title>WhatsApp-Clon</title>
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
@@ -12,22 +12,37 @@
             <header>
                 <h1>Chats</h1>
                 <input type="text" id="search-input" placeholder="Busca un chat o inicia uno nuevo">
+                <button id="create-group-button">Crear Grupo</button>
             </header>
             <div class="chat-list" id="chat-list">
+                <!-- Contactos serán añadidos aquí -->
             </div>
         </div>
         <div class="chat-window">
             <header>
                 <div class="contact-info">
                     <span id="contact-name">Selecciona un contacto</span>
+                    <span class="recent-message" id="recent-message"></span>
                 </div>
             </header>
             <div class="chat-messages" id="chat-messages">
+                <!-- Aca aparecen mensajes (No tocar, bug) -->
             </div>
             <div class="chat-input">
                 <input type="text" id="message-input" placeholder="Escribe un mensaje...">
                 <button id="send-button">Enviar</button>
             </div>
+        </div>
+    </div>
+    <div class="modal" id="group-modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal">&times;</span>
+            <h2>Crear Grupo</h2>
+            <input type="text" id="group-name" placeholder="Nombre del grupo">
+            <div class="group-contacts" id="group-contacts">
+                <!-- Para añadir al grupo(tambien bug) -->
+            </div>
+            <button id="create-group">Crear Grupo</button>
         </div>
     </div>
     <script src="app.js"></script>
